@@ -1,0 +1,95 @@
+server:
+  port: 9091
+  servlet:
+     context-path: /rdg
+              
+spring:
+  application:
+    name: topscore
+  metrics:
+      servo:
+        enabled: false
+#configs to connect to a secured server
+  boot:
+    admin:
+      url: http://localhost:8080
+      username: admin
+      password: admin
+#configs to give secured server info
+      client:
+          metadata:
+            user:
+              name: ${security.user.name}
+              password: ${security.user.password}
+
+#basic auth creddentials
+security:
+  basic:
+    enabled: false
+  user:
+    name: client
+    password: client
+
+management:
+  security:
+    enabled: false
+
+swagger:
+   enabled: true
+
+rdg:
+  connection:
+    pool:
+      provider: HikariCP
+    entitymanager:
+        mappingResources: NativeSQL.hbm.xml
+
+hikari:
+  datasource:
+    rdg:
+      dataSourceClassName: oracle.jdbc.pool.OracleDataSource
+      idleTimeOut: 600000
+      maxPoolSize: 30
+      minIdle: 1
+      poolName: RdgHikariCP
+      user: test
+      password: test01
+      jdbcUrl: jdbc:oracle:thin:@(DESCRIPTION=(LOAD_BALANCE=on)(ADDRESS=(PROTOCOL=TCP)(Host=localhost)(Port=2050))(CONNECT_DATA=(service_name=rdg)))
+      connectionTimeout: 600000
+      leakDetectionThreshold: 0
+      maxLifetime: 540000                       
+
+hibernate:
+  connection:
+    release_mode: auto
+  dialect: com.rdg.topscore.config.HibernateDialect
+  generate_statistics: false
+  show_sql: false
+
+health:
+  config:
+    enabled: false    
+
+endpoints:
+  health:
+    sensitive: false
+    enabled: true
+  info:
+    sensitive: false
+    enabled: true
+  metrics:
+    sensitive: false
+    enabled: true
+  trace:
+    sensitive: false
+    enabled: true
+  shutdown:
+    sensitive: false
+    enabled: true
+
+
+info:
+  app:
+    name: Top Score Rating
+    description: Top Score Rating Microservice
+    version: 1.0.0

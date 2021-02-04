@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD
+      3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<sql-query name="GET_SCORE_BY_PLAYERID">
+		<![CDATA[
+			select player_id, player, score, time from top_score_rank where player_id=?
+		]]>
+	</sql-query>
+
+	<sql-query name="GET_ALL_SCORES">
+		<![CDATA[
+			select * from top_score_rank
+		]]>
+	</sql-query>
+
+	<sql-query name="GET_SCORE_BY_PLAYER">
+		<![CDATA[
+			select score from top_score_rank where lower(player) like lower(?)
+		]]>
+	</sql-query>
+
+	<sql-query name="GET_SCORE_AFTER_PERIOD">
+		<![CDATA[
+			select score from top_score_rank where time > to_date('2020/11/01', 'YYYY/MM/DD')
+		]]>
+	</sql-query>
+
+	<sql-query name="GET_SCORE_BY_PLAYERS">
+		<![CDATA[
+			select score from top_score_rank where player player in (:players) and time < to_date('2020/12/01', 'YYYY/MM/DD')
+		]]>
+	</sql-query>
+
+	<sql-query name="GET_SCORE_BETWEEN_PERIOD">
+		<![CDATA[
+			select score from top_score_rank where time between to_date('2020/01/01', 'YYYY/MM/DD') and to_date('2021/01/01', 'YYYY/MM/DD')
+		]]>
+	</sql-query>
+
+	<sql-query name="DELETE_SCORE">
+		<![CDATA[
+			delete from top_score_rank where player_id=?
+		]]>
+	</sql-query>
+
+
+	<sql-query name="PLAYER_SCORE_TOP">
+		<![CDATA[
+			select max(score), time from top_score_rank where lower(player) like lower(?) group by score
+		]]>
+	</sql-query>
+
+	<sql-query name="PLAYER_SCORE_LOW">
+		<![CDATA[
+			select min(score), time from top_score_rank where lower(player) like lower(?) group by score
+		]]>
+	</sql-query>
+
+	<sql-query name="PLAYER_SCORE_AVG">
+		<![CDATA[
+			select avg(score), time from top_score_rank where lower(player) like lower(?) group by score
+		]]>
+	</sql-query>
+
+	<sql-query name="PLAYER_SCORE_ALL">
+		<![CDATA[
+			select score, time from top_score_rank where lower(player) like lower(?) group by score order by time
+		]]>
+	</sql-query>
+
+
+</hibernate-mapping>
